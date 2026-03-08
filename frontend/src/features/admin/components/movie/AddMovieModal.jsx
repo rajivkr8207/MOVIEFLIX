@@ -50,7 +50,6 @@ const AddMovieModal = ({ onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
     handlecreateMovie(formData)
     dispatch(fetchMovies());
 

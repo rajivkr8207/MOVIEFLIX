@@ -1,3 +1,4 @@
+import FavoriteModel from "../models/favorites.model.js";
 import MovieModel from "../models/movie.model.js";
 
 
@@ -41,52 +42,50 @@ export const createMovie = async (req, res) => {
 
     }
 };
-
 export const getAllMovies = async (req, res) => {
-    try {
-        const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
+  try {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const search = req.query.search || "";
+    const genre = req.query.genre;
 
-        const search = req.query.search || "";
-        const genre = req.query.genre;
+    const skip = (page - 1) * limit;
 
-        const skip = (page - 1) * limit;
+    let query = {};
 
-        let query = {};
-
-        if (search) {
-            query.title = { $regex: search, $options: "i" };
-        }
-
-        if (genre) {
-            query.genre = genre;
-        }
-
-        const totalMovies = await MovieModel.countDocuments(query);
-
-        const movies = await MovieModel
-            .find(query)
-            .sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limit);
-
-        res.status(200).json({
-            success: true,
-            page,
-            limit,
-            totalMovies,
-            totalPages: Math.ceil(totalMovies / limit),
-            movies
-        });
-
-    } catch (error) {
-
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
-
+    if (search) {
+      query.title = { $regex: new RegExp(search, "i") };
     }
+
+    if (genre) {
+      query.genre = genre;
+    }
+
+    const totalMovies = await MovieModel.countDocuments(query);
+
+    const movies = await MovieModel
+      .find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    res.status(200).json({
+      success: true,
+      page,
+      limit,
+      totalMovies,
+      totalPages: Math.ceil(totalMovies / limit),
+      movies
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+
+  }
 };
 
 export const getRandomMovies = async (req, res) => {
@@ -120,7 +119,11 @@ export const getRandomMovies = async (req, res) => {
 export const getSingleMovie = async (req, res) => {
 
     try {
-        const movie = await MovieModel.findById(req.params.id);
+
+        const movieId = req.params.id;
+        const userId = req.user?.id; // auth middleware से आएगा
+
+        const movie = await MovieModel.findById(movieId);
 
         if (!movie) {
             return res.status(404).json({
@@ -129,10 +132,21 @@ export const getSingleMovie = async (req, res) => {
             });
         }
 
+        // check favorite
+        let isFavorite = false;
+        let favorite = await FavoriteModel.findOne({
+            userId: userId,
+            movie: movieId
+        });
+
+        isFavorite = !!favorite;
+
         res.status(200).json({
             success: true,
-            movie
+            movie,
+            isFavorite,
         });
+
     } catch (error) {
 
         res.status(500).json({
@@ -143,7 +157,6 @@ export const getSingleMovie = async (req, res) => {
     }
 
 };
-
 
 
 export const updateMovie = async (req, res) => {

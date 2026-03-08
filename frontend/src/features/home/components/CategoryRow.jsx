@@ -1,12 +1,10 @@
 // src/components/CategoryRow.jsx
-import React, { useRef, useState } from 'react';
+import React, { useRef,  } from 'react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import MovieCard from './MovieCard';
 
 const CategoryRow = ({ title, movies, icon: Icon }) => {
   const scrollRef = useRef(null);
-  const [showLeftArrow, setShowLeftArrow] = useState(false);
-  const [showRightArrow, setShowRightArrow] = useState(true);
 
   const scroll = (direction) => {
     const container = scrollRef.current;
@@ -14,11 +12,6 @@ const CategoryRow = ({ title, movies, icon: Icon }) => {
     
     container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
 
-    // Update arrow visibility
-    setTimeout(() => {
-      setShowLeftArrow(container.scrollLeft > 0);
-      setShowRightArrow(container.scrollLeft < container.scrollWidth - container.offsetWidth);
-    }, 100);
   };
 
   return (
@@ -28,35 +21,14 @@ const CategoryRow = ({ title, movies, icon: Icon }) => {
         {Icon && <Icon className="text-[#e50914]" size={24} />}
         {title}
       </h2>
-
-      {/* Scroll Buttons */}
-      {showLeftArrow && (
-        <button
-          onClick={() => scroll('left')}
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-[var(--card-bg)] p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[var(--hover-color)]"
-        >
-          <FiChevronLeft size={24} />
-        </button>
-      )}
-
-      {showRightArrow && (
-        <button
-          onClick={() => scroll('right')}
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-[var(--card-bg)] p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[var(--hover-color)]"
-        >
-          <FiChevronRight size={24} />
-        </button>
-      )}
-
       {/* Movies Row */}
       <div 
         ref={scrollRef}
-        className="overflow-x-auto scrollbar-hide"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        className="scrollbar-hide"
       >
-        <div className="flex gap-4 pb-4">
+        <div className="flex flex-wrap gap-4 pb-4">
           {movies.map(movie => (
-            <div key={movie.id} className="flex-none w-48">
+            <div key={movie.id} className="flex-none w-48 mx-auto">
               <MovieCard movie={movie} />
             </div>
           ))}

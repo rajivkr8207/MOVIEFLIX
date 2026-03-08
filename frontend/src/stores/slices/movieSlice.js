@@ -1,16 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../lib/api/axios';
 
-
-// Get all movies
 export const fetchMovies = createAsyncThunk(
-    'movies/fetchMovies',
-    async (_, { rejectWithValue, }) => {
+    "movies/fetchMovies",
+    async (page = 1, { rejectWithValue }) => {
         try {
-            const response = await api.get('/movie/all')
-            return response.data;
+            const response = await api.get(`/movie/all?page=${page}&limit=4`);
+            return response.data.movies;
+
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || 'Failed to fetch movies');
+
+            return rejectWithValue(
+                error.response?.data?.message || "Failed to fetch movies"
+            );
+
         }
     }
 );
@@ -98,9 +101,11 @@ const movieSlice = createSlice({
                 state.error = null;
             })
             .addCase(fetchMovies.fulfilled, (state, action) => {
-                state.loading = false;
-                state.movies = action.payload.movies || action.payload;
-                state.totalPages = action.payload.totalPages || 1;
+                if (action.meta.arg === 1) {
+                    state.movies = action.payload;
+                } else {
+                    state.movies = [...state.movies, ...action.payload];
+                }
             })
             .addCase(fetchMovies.rejected, (state, action) => {
                 state.loading = false;

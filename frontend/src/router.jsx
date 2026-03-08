@@ -6,6 +6,7 @@ import Navbar from "./components/layout/Navbar";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { fetchCurrentUser } from "./stores/slices/authSlice";
+import ScrollToTop from "./utils/ScrollToTop";
 
 
 export default function AppRouter() {
@@ -17,7 +18,7 @@ export default function AppRouter() {
   }, []);
   return (
     <BrowserRouter>
-
+  <ScrollToTop />
       <Routes>
 
         {/* Public */}

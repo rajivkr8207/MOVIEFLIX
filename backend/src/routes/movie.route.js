@@ -12,7 +12,7 @@ MovieRouter.get("/all", getAllMovies);
 
 MovieRouter.get("/movies/random", getRandomMovies);
 
-MovieRouter.get("/:id", getSingleMovie);
+MovieRouter.get("/:id",IdentifyUser, getSingleMovie);
 
 MovieRouter.put("/:id",MovieValidator, IdentifyUser, isAdmin, updateMovie);
 

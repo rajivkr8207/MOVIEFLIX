@@ -13,6 +13,7 @@ import {
 import ThemeToggle from "./ThemeToggle";
 import useAuth from "../../features/auth/hooks/UseAuth";
 import { setQuery } from "../../stores/slices/searchSlice";
+import useDebounce from "../../hooks/useDebounce";
 
 const categories = [
   { id: "trending", label: "Trending" },
@@ -42,10 +43,13 @@ export default function Navbar() {
   };
 
   const handleSearch = (e) => {
-    if (e.key === "Enter") {
-      navigate(`/search?q=${query}`);
-    }
+    dispatch(setQuery(e.target.value))
   };
+  useDebounce(() => {
+  if (query) {
+    navigate(`/search?q=${query}`);
+  }
+}, 500, [query]);
 
   return (
     <>
@@ -69,7 +73,7 @@ export default function Navbar() {
                 {categories.map((c) => (
                   <button
                     key={c.id}
-                    className="px-3 py-1 rounded-lg text-sm hover:bg-gray-200 dark:hover:bg-gray-800"
+                    className="px-3 py-1 rounded-lg text-sm hover:bg-gray-200 dark:hover:bg-gray-800/30"
                   >
                     {c.label}
                   </button>
@@ -86,10 +90,10 @@ export default function Navbar() {
 
                 <input
                   value={query}
-                  onChange={(e) => dispatch(setQuery(e.target.value))}
+                  onChange={(e) => handleSearch(e)}
                   placeholder="Search movies..."
                   className="w-full pl-10 pr-4 py-2 rounded-lg border bg-[var(--card-bg)]"
-                  onKeyDown={handleSearch}
+
                 />
               </div>
             </div>
