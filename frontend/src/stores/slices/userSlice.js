@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../lib/api/axios';
 
-const API_URL = 'http://localhost:5000/api/admin/users'; // Replace with your API URL
-
 export const fetchUsers = createAsyncThunk(
   'users/fetchUsers',
   async (_, { rejectWithValue, }) => {
@@ -14,19 +12,6 @@ export const fetchUsers = createAsyncThunk(
     }
   }
 );
-
-export const toggleUserBlock = createAsyncThunk(
-  'users/toggleBlock',
-  async (userId, { rejectWithValue }) => {
-    try {
-      const response = await api.patch(`/admin/block/${userId}`)
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to update user status');
-    }
-  }
-);
-
 
 const initialState = {
   users: [],
@@ -75,28 +60,6 @@ const userSlice = createSlice({
         state.error = action.payload;
       })
       
-      // Toggle User Block
-      .addCase(toggleUserBlock.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(toggleUserBlock.fulfilled, (state, action) => {
-        state.loading = false;
-        const updatedUser = action.payload;
-        const index = state.users.findIndex(u => u.id === updatedUser.id);
-        if (index !== -1) {
-          state.users[index] = updatedUser;
-          
-          // Update stats
-          state.stats.active = state.users.filter(u => !u.isBlocked).length;
-          state.stats.blocked = state.users.filter(u => u.isBlocked).length;
-        }
-        state.success = true;
-      })
-      .addCase(toggleUserBlock.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
   },
 });
 

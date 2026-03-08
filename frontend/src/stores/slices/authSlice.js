@@ -1,8 +1,24 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import api from "../../lib/api/axios";
+
+
+export const fetchCurrentUser = createAsyncThunk(
+  "auth/fetchCurrentUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await api.get('/auth')
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch user"
+      );
+    }
+  }
+);
+
 
 const initialState = {
   user: null,
-  token: null,
   isAuthenticated: false,
   loading: false,
   error: null
@@ -26,7 +42,6 @@ const authSlice = createSlice({
     loginSuccess: (state, action) => {
       state.loading = false;
       state.user = action.payload.user;
-      state.token = action.payload.token;
       state.isAuthenticated = true;
     },
 
@@ -37,9 +52,30 @@ const authSlice = createSlice({
 
     logout: (state) => {
       state.user = null;
-      state.token = null;
       state.isAuthenticated = false;
     }
+
+  },
+  extraReducers: (builder) => {
+
+    builder
+      .addCase(fetchCurrentUser.pending, (state) => {
+        state.loading = true;
+      })
+
+      // fetch user success
+      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user;
+        state.isAuthenticated = true;
+      })
+
+      // fetch user fail
+      .addCase(fetchCurrentUser.rejected, (state) => {
+        state.loading = false;
+        state.user = null;
+        state.isAuthenticated = false;
+      });
 
   }
 });

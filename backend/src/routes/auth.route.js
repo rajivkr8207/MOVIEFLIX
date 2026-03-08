@@ -8,7 +8,7 @@ const authrouter = express.Router();
 authrouter.post("/register", RegisterValidator, register);
 authrouter.post("/login", LoginValidator, login);
 authrouter.get("/profile", IdentifyUser, getProfile);
-authrouter.get("/   ", IdentifyUser, get_me);
+authrouter.get("/", IdentifyUser, get_me);
 
 authrouter.get("/logout", IdentifyUser, logout);
 

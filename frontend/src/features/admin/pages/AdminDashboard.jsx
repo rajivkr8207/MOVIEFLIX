@@ -3,7 +3,7 @@ import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import DashboardStats from "../components/DashboardStats";
 import MoviesTable from "../components/movie/MoviesTable";
-import UsersTable from "../components/user/UsersTable";
+import UsersTable from "../components/user/UserManagement";
 
 const AdminDashboard = () => {
 

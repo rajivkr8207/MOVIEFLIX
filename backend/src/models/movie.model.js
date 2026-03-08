@@ -15,9 +15,11 @@ const movieSchema = new mongoose.Schema(
         poster: {
             type: String
         },
-
+        movieurl:{
+            type: String
+        },
         releaseDate: {
-            type: Date
+            type: String
         },
 
         trailer: {

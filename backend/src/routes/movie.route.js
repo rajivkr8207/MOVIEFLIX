@@ -8,7 +8,7 @@ const MovieRouter = express.Router()
 
 MovieRouter.post("/",MovieValidator, IdentifyUser, isAdmin, createMovie);
 
-MovieRouter.get("/movies", getAllMovies);
+MovieRouter.get("/all", getAllMovies);
 
 MovieRouter.get("/movies/random", getRandomMovies);
 

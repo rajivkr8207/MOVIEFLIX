@@ -26,18 +26,18 @@ import {
 import HeroSection from "../components/HeroSection";
 import CategoryRow from "../components/CategoryRow";
 // import Sidebar from "../components/Sidebar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Footer from "../components/Footer";
+import { setQuery } from "../../../stores/slices/searchSlice";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const theme = useSelector((state) => state.theme.theme);
 
   const isDark = theme === "dark";
 
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [showSearch, setShowSearch] = useState(false);
-
+const navigate= useNavigate()
   // Sample movie data
   const featuredMovie = {
     id: 1,
@@ -223,54 +223,58 @@ const HomePage = () => {
     },
   ];
 
-  const categories = [
-    { id: "all", label: "All", icon: FiHome },
-    { id: "trending", label: "Trending", icon: FiTrendingUp },
-    { id: "popular", label: "Popular", icon: FiStar },
-    { id: "new", label: "New Releases", icon: FiCalendar },
-    { id: "action", label: "Action", icon: FiFilm },
-    { id: "comedy", label: "Comedy", icon: FiTv },
-    { id: "drama", label: "Drama", icon: FiHeart },
-  ];
-
+  const dispatch = useDispatch();
+  const query = useSelector((state) => state.search.query);
   const filteredMovies = (movies) => {
     if (!searchQuery) return movies;
     return movies.filter((movie) =>
       movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   };
-
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      navigate(`/search?q=${query}`);
+    }
+  };
   return (
-    <div className="min-h-screen bg-[var(--bg-color)] text-[var(--text-color)]">
-{/* Main content */}
+    <div className={`min-h-screen ${isDark ? 'bg-gray-900 text-white' : "bg-white text-black"}`}>
+                  <div
+                    className={`md:hidden block  mx-auto mt-7 w-80   ${isDark ? "text-white" : "text-black"} `}
+                  >
+                    <div className="relative">
+                      <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+      
+                      <input
+                        value={query}
+                        onChange={(e) => dispatch(setQuery(e.target.value))}
+                        placeholder="Search movies..."
+                        className="w-full pl-10 pr-4 py-2 rounded-lg border outline-none"
+                        onKeyDown={handleSearch}
+                      />
+                    </div>
+                  </div>
       <main className="pt-16">
-        {/* Hero Section */}
         <HeroSection movie={featuredMovie} />
 
-        {/* Movie rows */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-          {/* Trending Now */}
           <CategoryRow
             title="Trending Now"
             movies={filteredMovies(trendingMovies)}
             icon={FiTrendingUp}
           />
 
-          {/* Popular on MovieFlix */}
           <CategoryRow
             title="Popular on MovieFlix"
             movies={filteredMovies(popularMovies)}
             icon={FiStar}
           />
 
-          {/* New Releases */}
           <CategoryRow
             title="New Releases"
             movies={filteredMovies(newReleases)}
             icon={FiCalendar}
           />
 
-          {/* Continue Watching */}
           <div className="bg-gradient-to-r from-[#e50914]/10 to-transparent rounded-2xl p-6">
             <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
               <FiClock className="text-[#e50914]" />
@@ -297,7 +301,6 @@ const HomePage = () => {
             </div>
           </div>
 
-          {/* Top Rated */}
           <CategoryRow
             title="Top Rated"
             movies={filteredMovies(
@@ -310,99 +313,7 @@ const HomePage = () => {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-[var(--border-color)] mt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-lg font-bold mb-4">MovieFlix</h3>
-              <p className="text-sm text-gray-500">
-                Your ultimate destination for movies and entertainment.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Navigation</h4>
-              <ul className="space-y-2 text-sm text-gray-500">
-                <li>
-                  <a href="#" className="hover:text-[#e50914]">
-                    Home
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-[#e50914]">
-                    Movies
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-[#e50914]">
-                    TV Shows
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-[#e50914]">
-                    My List
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Help</h4>
-              <ul className="space-y-2 text-sm text-gray-500">
-                <li>
-                  <a href="#" className="hover:text-[#e50914]">
-                    FAQ
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-[#e50914]">
-                    Contact Us
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-[#e50914]">
-                    Privacy Policy
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-[#e50914]">
-                    Terms of Use
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Follow Us</h4>
-              <div className="flex gap-4">
-                <a
-                  href="#"
-                  className="w-10 h-10 rounded-full bg-[var(--card-bg)] flex items-center justify-center hover:bg-[#e50914] transition-colors"
-                >
-                  <span className="text-xl">📘</span>
-                </a>
-                <a
-                  href="#"
-                  className="w-10 h-10 rounded-full bg-[var(--card-bg)] flex items-center justify-center hover:bg-[#e50914] transition-colors"
-                >
-                  <span className="text-xl">🐦</span>
-                </a>
-                <a
-                  href="#"
-                  className="w-10 h-10 rounded-full bg-[var(--card-bg)] flex items-center justify-center hover:bg-[#e50914] transition-colors"
-                >
-                  <span className="text-xl">📷</span>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-8 pt-8 border-t border-[var(--border-color)] text-center text-sm text-gray-500">
-            <p>&copy; 2024 MovieFlix. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+ <Footer />
     </div>
   );
 };

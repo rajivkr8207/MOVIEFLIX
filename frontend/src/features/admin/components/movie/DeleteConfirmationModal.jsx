@@ -24,16 +24,16 @@ const DeleteConfirmationModal = ({ movie, onClose, onConfirm }) => {
           </div>
 
           <p className="text-gray-600 mb-6">
-            Are you sure you want to delete <span className="font-semibold">{movie.title}</span>? 
+            Are you sure you want to delete <span className="font-semibold">{movie.title}</span>?
             All movie data, reviews, and bookings will be permanently removed.
           </p>
 
           <div className="bg-gray-50 rounded-lg p-4 mb-6">
             <div className="flex items-center gap-3">
-              <img src={movie.posterUrl} alt={movie.title} className="w-12 h-16 object-cover rounded" />
+              <img src={movie.poster} alt={movie.title} className="w-12 h-16 object-cover rounded" />
               <div>
                 <p className="font-medium text-gray-800">{movie.title}</p>
-                <p className="text-sm text-gray-500">{movie.releaseYear} • {movie.duration} min</p>
+                <p className="text-sm text-gray-500">{movie.releaseDate}</p>
               </div>
             </div>
           </div>

@@ -10,7 +10,8 @@ export const createMovie = async (req, res) => {
             releaseDate,
             trailer,
             genre,
-            category
+            category,
+            movieurl
         } = req.body;
 
         const movie = await MovieModel.create({
@@ -21,6 +22,7 @@ export const createMovie = async (req, res) => {
             trailer,
             genre,
             category,
+            movieurl,
             createdBy: req.user.id
         });
 

@@ -4,6 +4,7 @@ import { store } from "./stores/store";
 import { ToastContainer } from "react-toastify";
 
 const App = () => {
+
   return (
     <Provider store={store}>
       <AppRouter />

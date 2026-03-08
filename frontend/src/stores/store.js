@@ -3,6 +3,8 @@ import authReducer from "./slices/authSlice";
 import themeReducer from "./slices/themeSlice";
 import movieReducer from "./slices/movieSlice";
 import userReducer from "./slices/userSlice";
+import searchReducer from "./slices/searchSlice";
+
 // import favoriteReducer from "./slices/favoriteSlice";
 
 export const store = configureStore({
@@ -10,7 +12,9 @@ export const store = configureStore({
     auth: authReducer,
     theme: themeReducer,
     movies: movieReducer,
-    users: userReducer
+    users: userReducer,
+    search: searchReducer,
+
     // favorites: favoriteReducer
   }
 });

@@ -3,9 +3,18 @@ import PublicRoutes from "./routes/PublicRoutes";
 import AuthRoutes from "./routes/AuthRoutes";
 import AdminRoutes from "./routes/AdminRoutes";
 import Navbar from "./components/layout/Navbar";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { fetchCurrentUser } from "./stores/slices/authSlice";
 
 
 export default function AppRouter() {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchCurrentUser());
+  }, []);
   return (
     <BrowserRouter>
 

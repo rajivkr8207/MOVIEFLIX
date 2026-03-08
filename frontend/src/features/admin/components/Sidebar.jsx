@@ -25,7 +25,7 @@ export default function Sidebar({
       className={`${sidebarOpen ? "w-64" : "w-20"} bg-gray-900 text-white transition-all`}
     >
       <div className="p-4 flex justify-between">
-        {sidebarOpen && <h1 className="font-bold">Admin</h1>}
+        {sidebarOpen && <h1 className="font-bold" >Admin</h1>}
 
         <button onClick={() => setSidebarOpen(!sidebarOpen)}>
           {sidebarOpen ? <FiX /> : <FiMenu />}

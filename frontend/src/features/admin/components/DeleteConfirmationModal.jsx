@@ -25,7 +25,7 @@ const DeleteConfirmationModal = ({ user, onClose, onConfirm }) => {
           </div>
 
           <p className="text-gray-600 mb-6">
-            Are you sure you want to delete <span className="font-semibold">{user.name}</span>? 
+            Are you sure you want to delete <span className="font-semibold">{user.name}</span>?
             All user data, bookings, and history will be permanently removed.
           </p>
 
@@ -47,7 +47,7 @@ const DeleteConfirmationModal = ({ user, onClose, onConfirm }) => {
               Cancel
             </button>
             <button
-              onClick={onConfirm}
+              onClick={() => onConfirm(user._id)}
               className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
             >
               Delete User

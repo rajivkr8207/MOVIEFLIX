@@ -30,7 +30,7 @@ const useAuth = () => {
     dispatch(loginStart());
     try {
       const res = await LoginUser(data);
-      dispatch(loginSuccess(res.user));
+      dispatch(loginSuccess(res));
       toast.success(res.message);
       navigate("/");
     } catch (error) {
@@ -44,9 +44,10 @@ const useAuth = () => {
       await LogOutUser();
       dispatch(logout());
       toast.success("Logged out successfully");
-      router.push("/login");
+      navigate("/auth/login");
     } catch (error) {
-      toast.error("Logout failed");
+      console.log(error);
+      // toast.error("Logout failed");
     }
   };
   return { handleRegister, handleLogin, handleLogout };
