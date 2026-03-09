@@ -54,7 +54,6 @@ const ThemeToggle = () => {
               : "bg-gradient-to-br from-yellow-300 to-yellow-500"
           }`}
         />
-
       </div>
 
     </motion.button>

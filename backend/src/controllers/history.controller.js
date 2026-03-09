@@ -29,7 +29,6 @@ export const addToHistory = async (req, res) => {
                 history: existingHistory
             });
         } else {
-            // Create new history entry
             const history = new HistoryModel({
                 userId,
                 movieId,

@@ -25,24 +25,6 @@
     --error-color: #e74c3c;
 }
 
-/* .light-theme {
-    --bg-color: var(--light-bg);
-    --text-color: var(--light-text);
-    --card-bg: var(--light-card);
-    --border-color: var(--light-border);
-    --shadow-color: var(--light-shadow);
-    --hover-color: var(--light-hover);
-}
-
-.dark-theme {
-    --bg-color: var(--dark-bg);
-    --text-color: var(--dark-text);
-    --card-bg: var(--dark-card);
-    --border-color: var(--dark-border);
-    --shadow-color: var(--dark-shadow);
-    --hover-color: var(--dark-hover);
-} */
-
 body {
     background-color: var(--bg-color);
     color: var(--text-color);

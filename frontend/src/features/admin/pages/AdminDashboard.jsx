@@ -8,22 +8,15 @@ import UsersTable from "../components/user/UserManagement";
 const AdminDashboard = () => {
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [activeTab, setActiveTab] = useState("dashboard");
+  const [activeTab, setActiveTab] = useState("movies");
 
   const renderContent = () => {
     switch (activeTab) {
-
-      case "dashboard":
-        return <DashboardStats />;
-
       case "movies":
         return <MoviesTable />;
 
       case "users":
         return <UsersTable />;
-
-      default:
-        return <div>Section not found</div>;
     }
   };
 

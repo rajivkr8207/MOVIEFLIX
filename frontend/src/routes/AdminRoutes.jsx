@@ -1,21 +1,18 @@
-import { Routes, Route } from "react-router-dom";
-import AdminDashboard from "../features/admin/pages/AdminDashboard";
+import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-// import Users from "../pages/Users";
-// import Movies from "../pages/Movies";
+const AdminRoute = ({ children }) => {
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
 
-export default function AdminRoutes() {
-  return (
-    <Routes>
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
 
+  if (user?.role !== "admin") {
+    return <Navigate to="/" replace />;
+  }
 
-        <Route path="dashboard" element={<AdminDashboard />} />
+  return children;
+};
 
-        {/* <Route path="users" element={<Users />} />
-
-        <Route path="movies" element={<Movies />} /> */}
-
-
-    </Routes>
-  );
-}
+export default AdminRoute;

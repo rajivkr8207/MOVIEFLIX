@@ -3,17 +3,16 @@ import api from '../../lib/api/axios';
 
 export const fetchMovies = createAsyncThunk(
     "movies/fetchMovies",
-    async (page = 1, { rejectWithValue }) => {
+    async ({ page = 1, limit = 4 }, { rejectWithValue }) => {
         try {
-            const response = await api.get(`/movie/all?page=${page}&limit=4`);
-            return response.data.movies;
+            const response = await api.get(`/movie/all?page=${page}&limit=${limit}`);
+
+            return response.data
 
         } catch (error) {
-
             return rejectWithValue(
                 error.response?.data?.message || "Failed to fetch movies"
             );
-
         }
     }
 );
@@ -70,14 +69,34 @@ export const deleteMovie = createAsyncThunk(
     }
 );
 
+export const fetchHistoryMovies = createAsyncThunk(
+    "movies/fetchHistoryMovies",
+    async ({ page = 1, limit = 10 }, { rejectWithValue }) => {
+        try {
+            const response = await api.get(`/history?page=${page}&limit=${limit}`);
+            return {
+                movies: response.data.history,
+                totalPages: response.data.pagination.itemsPerPage,
+                page
+            };
+
+        } catch (error) {
+            return rejectWithValue(
+                error.response?.data?.message || "Failed to fetch history movies"
+            );
+        }
+    }
+);
 const initialState = {
     movies: [],
     currentMovie: null,
+    history: [],
     loading: false,
     error: null,
     success: false,
     totalPages: 1,
     currentPage: 1,
+    hasMore: true,
 };
 
 const movieSlice = createSlice({
@@ -93,6 +112,7 @@ const movieSlice = createSlice({
         setCurrentPage: (state, action) => {
             state.currentPage = action.payload;
         },
+
     },
     extraReducers: (builder) => {
         builder
@@ -101,13 +121,40 @@ const movieSlice = createSlice({
                 state.error = null;
             })
             .addCase(fetchMovies.fulfilled, (state, action) => {
-                if (action.meta.arg === 1) {
-                    state.movies = action.payload;
+                state.loading = false;
+
+                const { movies, page, totalPages, hasMore } = action.payload;
+
+                if (page === 1) {
+                    state.movies = movies;
                 } else {
-                    state.movies = [...state.movies, ...action.payload];
+                    state.movies = [...state.movies, ...movies];
                 }
+
+                state.currentPage = page;
+                state.totalPages = totalPages;
+                state.hasMore = hasMore;
             })
             .addCase(fetchMovies.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(fetchHistoryMovies.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+
+            .addCase(fetchHistoryMovies.fulfilled, (state, action) => {
+                state.loading = false;
+                const { movies, page } = action.payload;
+                if (page === 1) {
+                    state.history = movies;
+                } else {
+                    state.history = [...state.history, ...movies];
+                }
+            })
+
+            .addCase(fetchHistoryMovies.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })

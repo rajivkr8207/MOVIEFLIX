@@ -43,49 +43,55 @@ export const createMovie = async (req, res) => {
     }
 };
 export const getAllMovies = async (req, res) => {
-  try {
-    const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 10;
-    const search = req.query.search || "";
-    const genre = req.query.genre;
+    try {
 
-    const skip = (page - 1) * limit;
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+        const search = req.query.search || "";
+        const genre = req.query.genre;
 
-    let query = {};
+        const skip = (page - 1) * limit;
 
-    if (search) {
-      query.title = { $regex: new RegExp(search, "i") };
+        let query = {};
+
+        if (search) {
+            query.title = { $regex: new RegExp(search, "i") };
+        }
+
+        if (genre) {
+            query.genre = genre;
+        }
+
+        const totalMovies = await MovieModel.countDocuments(query);
+
+        const movies = await MovieModel
+            .find(query)
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        const totalPages = Math.ceil(totalMovies / limit);
+
+        const hasMore = page < totalPages;
+
+        res.status(200).json({
+            success: true,
+            page,
+            limit,
+            totalMovies,
+            totalPages,
+            hasMore,
+            movies
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+
     }
-
-    if (genre) {
-      query.genre = genre;
-    }
-
-    const totalMovies = await MovieModel.countDocuments(query);
-
-    const movies = await MovieModel
-      .find(query)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
-
-    res.status(200).json({
-      success: true,
-      page,
-      limit,
-      totalMovies,
-      totalPages: Math.ceil(totalMovies / limit),
-      movies
-    });
-
-  } catch (error) {
-
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-
-  }
 };
 
 export const getRandomMovies = async (req, res) => {

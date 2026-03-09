@@ -1,18 +1,9 @@
 // src/components/CategoryRow.jsx
 import React, { useRef,  } from 'react';
-import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-import MovieCard from './MovieCard';
+import MovieCard from '../../movie/components/MovieCard';
 
 const CategoryRow = ({ title, movies, icon: Icon }) => {
   const scrollRef = useRef(null);
-
-  const scroll = (direction) => {
-    const container = scrollRef.current;
-    const scrollAmount = direction === 'left' ? -container.offsetWidth : container.offsetWidth;
-    
-    container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-
-  };
 
   return (
     <div className="relative group">
@@ -27,11 +18,13 @@ const CategoryRow = ({ title, movies, icon: Icon }) => {
         className="scrollbar-hide"
       >
         <div className="flex flex-wrap gap-4 pb-4">
-          {movies.map(movie => (
+          {movies?.map(movie => (
             <div key={movie.id} className="flex-none w-48 mx-auto">
               <MovieCard movie={movie} />
             </div>
           ))}
+
+
         </div>
       </div>
     </div>

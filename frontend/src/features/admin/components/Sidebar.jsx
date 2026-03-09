@@ -8,10 +8,8 @@ import {
 } from "react-icons/fi";
 
 const menuItems = [
-  { id: "dashboard", label: "Dashboard", icon: FiHome },
   { id: "movies", label: "Movies", icon: FiFilm },
   { id: "users", label: "Users", icon: FiUsers },
-  { id: "settings", label: "Settings", icon: FiSettings },
 ];
 
 export default function Sidebar({

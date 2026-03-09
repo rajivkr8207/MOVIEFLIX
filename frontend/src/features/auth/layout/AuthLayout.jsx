@@ -11,7 +11,6 @@ const AuthLayout = ({ children }) => {
         isDark ? "bg-gray-900" : "bg-gray-50"
       }`}
     >
-      {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Gradient Orbs */}
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-[var(--primary)]/30 to-orange-500/30 rounded-full blur-3xl animate-pulse"></div>
