@@ -15,12 +15,6 @@ import useAuth from "../../features/auth/hooks/UseAuth";
 import { setQuery } from "../../stores/slices/searchSlice";
 import useDebounce from "../../hooks/useDebounce";
 
-const categories = [
-  { id: "trending", label: "Trending" },
-  { id: "popular", label: "Popular" },
-  { id: "top", label: "Top Rated" },
-  { id: "upcoming", label: "Upcoming" },
-];
 
 export default function Navbar() {
   const { isAuthenticated, user } = useSelector((s) => s.auth);
@@ -32,7 +26,6 @@ export default function Navbar() {
 
   const dispatch = useDispatch();
   const query = useSelector((state) => state.search.query);
-  const [mobileMenu, setMobileMenu] = useState(false);
   const [profileMenu, setProfileMenu] = useState(false);
 
   const navigate = useNavigate();
@@ -58,10 +51,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16">
             {/* LEFT */}
             <div className="flex items-center gap-4">
-              <button onClick={() => setMobileMenu(true)} className={`lg:hidden ${isDark ? "text-white" : "text-black"}`}>
-                <FiMenu size={24} />
-              </button>
-
+           
               <Link to="/" className="text-2xl font-bold text-[#e50914]">
                 MOVIEFLIX
               </Link>
@@ -70,14 +60,6 @@ export default function Navbar() {
               <div
                 className={`hidden lg:flex gap-2 ml-6 ${isDark ? "text-white" : "text-black"}`}
               >
-                {categories.map((c) => (
-                  <button
-                    key={c.id}
-                    className="px-3 py-1 rounded-lg text-sm hover:bg-gray-200 dark:hover:bg-gray-800/30"
-                  >
-                    {c.label}
-                  </button>
-                ))}
               </div>
             </div>
 
@@ -101,11 +83,6 @@ export default function Navbar() {
             {/* RIGHT */}
             <div className="flex items-center gap-3">
               <ThemeToggle />
-
-              <button className={`relative  ${isDark ? 'text-white' : "text-black"} `}>
-                <FiBell size={20} />
-                <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full" />
-              </button>
 
               {!isAuthenticated ? (
                 <div className="flex gap-2">
@@ -149,20 +126,6 @@ export default function Navbar() {
                           Profile
                         </Link>
 
-                        <Link
-                          to="/watchlist"
-                          className="block px-4 py-2 "
-                        >
-                          Watchlist
-                        </Link>
-
-                        <Link
-                          to="/favorites"
-                          className="block px-4 py-2 "
-                        >
-                          Favorites
-                        </Link>
-
                         {isAdmin && (
                           <Link
                             to="/admin/dashboard"
@@ -188,36 +151,6 @@ export default function Navbar() {
           </div>
         </div>
       </nav>
-
-      {/* MOBILE MENU */}
-      <AnimatePresence>
-        {mobileMenu && (
-          <motion.div
-            initial={{ x: -300 }}
-            animate={{ x: 0 }}
-            exit={{ x: -300 }}
-            className="fixed top-0 left-0 w-64 h-full bg-black/60 backdrop-blur-lg text-white z-50 shadow-lg"
-          >
-            <div className="flex justify-between p-4 border-b">
-              <h2 className="font-bold">Menu</h2>
-              <button onClick={() => setMobileMenu(false)}>
-                <FiX size={22} />
-              </button>
-            </div>
-
-            <div className="p-4 space-y-2">
-              {categories.map((c) => (
-                <button
-                  key={c.id}
-                  className="block w-full text-left px-3 py-2 rounded-lg hover:bg-gray-200"
-                >
-                  {c.label}
-                </button>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </>
   );
 }

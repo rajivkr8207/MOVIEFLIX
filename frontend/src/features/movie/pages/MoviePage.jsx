@@ -128,10 +128,7 @@ const MoviePage = () => {
 
               {/* Movie Meta */}
               <div className="flex flex-wrap items-center gap-4 text-sm mb-4">
-                <span className="flex items-center gap-1 bg-yellow-500 text-black px-3 py-1 rounded-full">
-                  <FiStar size={16} />
-                  {movie.rating || "8.5"}
-                </span>
+                
                 <span className="flex items-center gap-1">
                   <FiCalendar size={16} className="text-gray-400" />
                   {movie.releaseDate?.split("-")[0] || "2024"}
@@ -172,11 +169,6 @@ const MoviePage = () => {
                     Watch Movie
                   </button>
                 )}
-
-                <button className="px-8 py-3 bg-[var(--card-bg)] text-[var(--text-color)] rounded-lg font-semibold flex items-center gap-2 hover:bg-[var(--hover-color)] transition-all transform hover:scale-105">
-                  <FiPlus size={20} />
-                  Add to Watchlist
-                </button>
 
                 <button
                   onClick={toggleFavorite}

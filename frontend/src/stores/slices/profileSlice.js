@@ -21,7 +21,6 @@ export const fetchHistory = createAsyncThunk(
     async ({ page = 1, limit = 10 }, { rejectWithValue }) => {
         try {
             const res = await api.get(`/history?page=${page}&limit=${limit}`);
-            console.log(res)
             return {
                 movies: res.data.history,
                 page,
@@ -38,7 +37,6 @@ export const fetchFavorites = createAsyncThunk(
     async ({ rejectWithValue }) => {
         try {
             const res = await api.get(`/favorites`);
-            console.log(res)
             return {
                 movies: res.data.favorites,
             };

@@ -13,8 +13,8 @@ import { FaHistory } from "react-icons/fa";
 
 const HomePage = () => {
   const theme = useSelector((state) => state.theme.theme);
-
   const isDark = theme === "dark";
+  
   const featuredMovie = {
     id: 1,
     title: "Ekaki Chapter 5",
@@ -27,8 +27,8 @@ const HomePage = () => {
     duration: 148,
     genre: ["Funny", "Action", "Thriller"],
   };
+  
   const dispatch = useDispatch();
-
   const { movies, page, loading, hasMore, history } = useSelector(
     (state) => state.movies,
   );
@@ -37,42 +37,60 @@ const HomePage = () => {
     dispatch(fetchHistoryMovies({ page: 1, limit: 10 }));
   }, [dispatch]);
 
-  const observer = useRef();
+  useEffect(() => {
+    dispatch(fetchMovies({ page: 1, limit: 10 }));
+  }, [dispatch]);
 
-  const lastMovieRef = useCallback(
-    (node) => {
-      if (loading) return;
-  
-      if (observer.current) observer.current.disconnect();
-  
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasMore) {
-          dispatch(fetchMovies(page));
-        }
-      });
-  
-      if (node) observer.current.observe(node);
-    },
-    [loading, hasMore, page, dispatch],
-  );
+  const observer = useRef();
+  const observerTarget = useRef(null);
 
   useEffect(() => {
-    dispatch(fetchMovies(1));
-  }, []);
+    const currentObserver = observer.current;
+    
+    const observeTarget = observerTarget.current;
+    
+    if (!observeTarget) return;
 
-  const filteredMovies = (movies) => {
-    if (!movies) return [];
+    const options = {
+      root: null,
+      rootMargin: '20px',
+      threshold: 0.1,
+    };
 
-    if (Array.isArray(movies)) {
-      return movies.map((movie) => movie.movieId || movie);
+    const handleIntersect = (entries) => {
+      const [entry] = entries;
+      if (entry.isIntersecting && !loading && hasMore) {
+        dispatch(fetchMovies({ page: page + 1, limit: 5 }));
+      }
+    };
+
+    observer.current = new IntersectionObserver(handleIntersect, options);
+    observer.current.observe(observeTarget);
+
+    return () => {
+      if (currentObserver) {
+        currentObserver.disconnect();
+      }
+    };
+  }, [loading, hasMore, page, dispatch]);
+
+  // Helper function to extract movies from response
+  const extractMovies = (data) => {
+    if (!data) return [];
+    
+    if (Array.isArray(data)) {
+      return data.map(item => item.movieId || item);
     }
-
-    return movies.movieId || movies;
+    
+    return data.movieId ? [data.movieId] : [data];
   };
+
+  const historyMovies = extractMovies(history);
+  const nowMovies = extractMovies(movies);
 
   return (
     <div
-      className={`min-h-screen ${isDark ? "bg-gray-900 text-white" : "bg-white text-black"}`}
+      className={`min-h-screen ${isDark ? "text-white" : " text-black"} mt-24`}
     >
       <SearchBox />
       <main className="pt-16">
@@ -81,14 +99,31 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
           <CategoryRow
             title="History"
-            movies={filteredMovies(history)}
+            movies={historyMovies}
             icon={FaHistory}
           />
-          <CategoryRow
-            title="Movie Now"
-            movies={filteredMovies(movies)}
-            icon={FiTrendingUp}
-          />
+          
+          <div>
+            <CategoryRow
+              title="Movie Now"
+              movies={nowMovies}
+              icon={FiTrendingUp}
+            />
+            
+            {/* Observer target for infinite scroll */}
+            {hasMore && (
+              <div 
+                ref={observerTarget} 
+                className="w-full h-10 flex justify-center items-center mt-4"
+              >
+                {loading && (
+                  <div className="flex justify-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white"></div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </main>
 
