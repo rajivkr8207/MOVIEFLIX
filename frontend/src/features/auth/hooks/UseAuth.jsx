@@ -20,7 +20,7 @@ const useAuth = () => {
     try {
       const res = await RegisterUser(data);
       toast.success(res.message);
-      navigate("/auth/login");
+      navigate("/login");
     } catch (error) {
       toast.error(error.response?.data?.message);
     }
@@ -44,7 +44,7 @@ const useAuth = () => {
       await LogOutUser();
       dispatch(logout());
       toast.success("Logged out successfully");
-      navigate("/auth/login");
+      navigate("/login");
     } catch (error) {
       console.log(error);
       // toast.error("Logout failed");

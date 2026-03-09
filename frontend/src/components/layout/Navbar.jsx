@@ -3,11 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  FiMenu,
   FiSearch,
-  FiBell,
   FiLogOut,
-  FiX,
 } from "react-icons/fi";
 
 import ThemeToggle from "./ThemeToggle";
@@ -87,14 +84,14 @@ export default function Navbar() {
               {!isAuthenticated ? (
                 <div className="flex gap-2">
                   <Link
-                    to="/auth/login"
+                    to="/login"
                     className={`px-4 py-1 rounded-lg hover:bg-gray-700  ${isDark ? 'text-white' : "text-black"} `}
                   >
                     Login
                   </Link>
 
                   <Link
-                    to="/auth/register"
+                    to="/register"
                     className="px-4 py-1 rounded-lg bg-[#e50914] text-white"
                   >
                     Register

@@ -119,24 +119,12 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate form
     const newErrors = validateForm();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
     handleRegister(formData)
-    // const result = await dispatch(
-    //   registerUser({
-    //     name: formData.name,
-    //     email: formData.email,
-    //     password: formData.password,
-    //   }),
-    // );
-
-    // if (!result.error) {
-    //   navigate("/?registered=true");
-    // }
   };
 
   const getStrengthColor = () => {
@@ -196,7 +184,6 @@ const RegisterPage = () => {
             </p>
           </div>
 
-          {/* Error Message */}
           <AnimatePresence>
             {error && (
               <div
@@ -210,10 +197,8 @@ const RegisterPage = () => {
             )}
           </AnimatePresence>
 
-          {/* Register Form */}
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-4">
-              {/* Name Field */}
               <div>
                 <label
                   htmlFor="name"
@@ -433,35 +418,6 @@ const RegisterPage = () => {
               </div>
             </div>
 
-            {/* Terms and Conditions */}
-            <div className="flex items-center">
-              <input
-                id="terms"
-                name="terms"
-                type="checkbox"
-                required
-                className="h-4 w-4 text-[var(--primary)] focus:ring-[var(--primary)] border-gray-300 rounded"
-              />
-              <label
-                htmlFor="terms"
-                className="ml-2 block text-sm text-gray-900 dark:text-gray-300"
-              >
-                I agree to the{" "}
-                <Link
-                  href="/terms"
-                  className="text-[var(--primary)] hover:text-[var(--primary)]-hover font-medium"
-                >
-                  Terms of Service
-                </Link>{" "}
-                and{" "}
-                <Link
-                  href="/privacy"
-                  className="text-[var(--primary)] hover:text-[var(--primary)]-hover font-medium"
-                >
-                  Privacy Policy
-                </Link>
-              </label>
-            </div>
 
             {/* Submit Button */}
             <div>
@@ -509,7 +465,7 @@ const RegisterPage = () => {
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Already have an account?{" "}
                 <Link
-                  href="/login"
+                  to="/login"
                   className="font-medium text-[var(--primary)] hover:text-[var(--primary)]-hover"
                 >
                   Sign in here
