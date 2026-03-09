@@ -1,7 +1,6 @@
 import { FiX, FiMail, FiCalendar, FiLock, FiUnlock } from "react-icons/fi";
 
 const UserDetailsModal = ({ user, onClose, onBlock }) => {
-
   const StatusBadge = ({ isBlocked }) => {
 
     return (

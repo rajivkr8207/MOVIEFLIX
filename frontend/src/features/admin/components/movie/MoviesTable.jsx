@@ -95,7 +95,6 @@ const MovieManagement = () => {
               <FiFilm className="text-blue-600" size={24} />
             </div>
           </div>
-          <p className="text-green-600 text-sm mt-2">↑ 12% from last month</p>
         </div>
       </div>
 

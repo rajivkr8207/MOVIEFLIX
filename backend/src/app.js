@@ -10,7 +10,7 @@ import FavoriteRouter from './routes/favorite.route.js';
 import HistoryRouter from './routes/history.route.js';
 const app = express()
 
-app.use(expres.json())
+app.use(express.json())
 app.use(morgan('dev'))
 app.use(cookieParser())
 app.use(express.static('./public/dist'))

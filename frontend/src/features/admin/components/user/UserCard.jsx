@@ -2,24 +2,6 @@ import React from 'react'
 import { FiCheckCircle, FiEdit2, FiEye, FiLock, FiTrash2, FiUnlock, FiUserX } from 'react-icons/fi';
 
 const UserCard = ({ user, setSelectedUser, setShowDetailsModal, handleBlockUser, setShowDeleteModal }) => {
-      // Status badge component
-  const StatusBadge = ({ status }) => {
-    const statusConfig = {
-      active: { bg: 'bg-green-100', text: 'text-green-800', icon: FiCheckCircle, label: 'Active' },
-      inactive: { bg: 'bg-gray-100', text: 'text-gray-800', icon: FiUserX, label: 'Inactive' },
-      blocked: { bg: 'bg-red-100', text: 'text-red-800', icon: FiLock, label: 'Blocked' }
-    };
-    
-    const config = statusConfig[status] || statusConfig.inactive;
-    const Icon = config.icon;
-    
-    return (
-      <span className={`${config.bg} ${config.text} px-2 py-1 text-xs rounded-full flex items-center gap-1 w-fit`}>
-        <Icon size={12} />
-        {config.label}
-      </span>
-    );
-  };
 
     return (
         <tr key={user.id} className="hover:bg-gray-50">
@@ -32,7 +14,7 @@ const UserCard = ({ user, setSelectedUser, setShowDetailsModal, handleBlockUser,
                 </div>
             </td>
             <td className="px-6 py-4">
-                <StatusBadge status={user.isBlock} />
+                {user.isBlock ? "BLOCKED": "ACTIVE"}
             </td>
             <td className="px-6 py-4 text-sm text-gray-600">{user?.joinDate}</td>
             <td className="px-6 py-4">
